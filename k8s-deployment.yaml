@@ -1,0 +1,35 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dotnetcore-service
+spec:
+  selector:
+    app: dotnetcore-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: dotnetcore-deployment
+  labels:
+    app: dotnetcore-app
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: dotnetcore-app
+  template:
+    metadata:
+      labels:
+        app: dotnetcore-app
+    spec:
+      containers:
+      - name: dotnetcore-app
+        image: johnnybouder/dotnetcore-website:44
+        ports:
+          - containerPort: 80
